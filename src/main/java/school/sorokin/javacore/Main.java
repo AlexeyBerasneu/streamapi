@@ -28,6 +28,7 @@ public class Main {
         List<Order> orders1 = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
                 .filter(o -> o.getProducts().stream().anyMatch(p -> p.getCategory().equals("Children's products")))
+                .distinct()
                 .collect(Collectors.toList());
 
         //Task 3 - get sum the price of Products from category "Toys" and apply 10% discount
@@ -132,7 +133,7 @@ public class Main {
                                 .mapToDouble(BigDecimal::doubleValue)
                                 .reduce(0, (a, b) -> a + b),
                         (v1, v2) -> v1,
-                        LinkedHashMap::new
+                        HashMap::new
                 ));
         //Task 14 map with Category and list of name's products
         Map<String, List<String>> mapName = customers.stream()
@@ -149,6 +150,7 @@ public class Main {
         Map<String, Product> mapWithPrice = customers.stream()
                 .flatMap(c -> c.getOrders().stream())
                 .flatMap(o -> o.getProducts().stream())
+                .distinct()
                 .collect(Collectors.groupingBy(
                         Product::getCategory,
                         Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Product::getPrice)),
